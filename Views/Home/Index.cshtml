@@ -1,0 +1,11 @@
+﻿@model qsales.Models.SalesEntryViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "noImplicitAny": false,
+      "noEmitOnError": true,
+      "removeComments": false,
+      "sourceMap": true,
+      "forceConsistentCasingInFileNames": true,
+      "module": "commonjs",
+      "jsx": "react",
+      "target": "es5",
+      "experimentalDecorators": true,
+      "typeRoots": [
+        "./node_modules/@types",
+        "./node_modules/@microsoft"
+      ]
+    },
+    "exclude": [
+      "./node_modules",
+      "./wwwroot"
+    ]
+  }
+  
