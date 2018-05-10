@@ -6,6 +6,6 @@ namespace qsales.Repositories
 {
     public interface ISalesRepository
     {
-        Task<SalesEntryViewModel> GetSalesByDateAsync(DateTime entryDate);
+        Task<DashboardViewModel> GetSalesByDateAsync(DateTime entryDate);
     }
 }

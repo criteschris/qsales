@@ -1,0 +1,11 @@
+@model System.Collections.Generic.IEnumerable<qsales.Models.OperationHour>
+
+@{
+    ViewData["Title"] = "Manage Operation Hours";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/manage-operationhours.js" asp-append-version="true"></script>
+}

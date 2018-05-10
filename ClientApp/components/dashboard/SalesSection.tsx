@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import {
-    ConvertFiveDollarBillsToAmount,
-    ConvertTenDollarBillsToAmount,
-    ConvertTwentyDollarBillsToAmount,
-    ConvertFiftyDollarBillsToAmount,
-    ConvertHundredDollarBillsToAmount,
+    SumFiveDollarBills,
+    SumTenDollarBills,
+    SumTwentyDollarBills,
+    SumFiftyDollarBills,
+    SumHundredDollarBills,
     ConvertToCurrencyString,
     SumCashFromCurrencies
 } from '../../converters/MoneyConverters';
@@ -24,7 +24,7 @@ export const SalesSection = (props: SalesSectionProps) => {
         <div>
             <h4>Cash register information</h4>
             <div className='panel panel-default'>
-                <div className='panel-body'>
+                {/* <div className='panel-body'> */}
                     <table className='table table-striped'>
                         <thead>
                             <tr>
@@ -37,27 +37,27 @@ export const SalesSection = (props: SalesSectionProps) => {
                             <tr>
                                 <td>100's</td>
                                 <td>{props.sales.hundredDollarBills}</td>
-                                <td className='text-right'>${ConvertHundredDollarBillsToAmount(props.sales.hundredDollarBills)}</td>
+                                <td className='text-right'>${SumHundredDollarBills(props.sales.hundredDollarBills)}</td>
                             </tr>
                             <tr>
                                 <td>50's</td>
                                 <td>{props.sales.fiftyDollarBills}</td>
-                                <td className='text-right'>${ConvertFiftyDollarBillsToAmount(props.sales.fiftyDollarBills)}</td>
+                                <td className='text-right'>${SumFiftyDollarBills(props.sales.fiftyDollarBills)}</td>
                             </tr>
                             <tr>
                                 <td>20's</td>
                                 <td>{props.sales.twentyDollarBills}</td>
-                                <td className='text-right'>${ConvertTwentyDollarBillsToAmount(props.sales.twentyDollarBills)}</td>
+                                <td className='text-right'>${SumTwentyDollarBills(props.sales.twentyDollarBills)}</td>
                             </tr>
                             <tr>
                                 <td>10's</td>
                                 <td>{props.sales.tenDollarBills}</td>
-                                <td className='text-right'>${ConvertTenDollarBillsToAmount(props.sales.tenDollarBills)}</td>
+                                <td className='text-right'>${SumTenDollarBills(props.sales.tenDollarBills)}</td>
                             </tr>
                             <tr>
                                 <td>5's</td>
                                 <td>{props.sales.fiveDollarBills}</td>
-                                <td className='text-right'>${ConvertFiveDollarBillsToAmount(props.sales.fiveDollarBills)}</td>
+                                <td className='text-right'>${SumFiveDollarBills(props.sales.fiveDollarBills)}</td>
                             </tr>
                             <tr>
                                 <td>1's</td>
@@ -80,7 +80,7 @@ export const SalesSection = (props: SalesSectionProps) => {
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                {/* </div> */}
                 <div className='panel-footer'>
                     <div className='row'>
                         <div className='col-xs-6'>

@@ -1,8 +1,10 @@
+@model qsales.Models.FacetViewModel
+
 @{
     ViewData["Title"] = "Sales Entry";
 }
 
-<app container-element-id="react-app"></app>
+<app redux-initial-state="Model" container-element-id="react-app"></app>
 
 @section scripts {
     <script src="~/js/sales-entry.js" asp-append-version="true"></script>

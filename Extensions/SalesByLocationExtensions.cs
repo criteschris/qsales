@@ -11,5 +11,21 @@ namespace qsales.Extensions
         {
             return source.Include("Location");
         }
+
+        public static IQueryable<SalesByLocation> MakeSerializable(this IQueryable<SalesByLocation> source)
+        {
+            return source.Select(x => new SalesByLocation
+            {
+                Id = x.Id,
+                LocationId = x.LocationId,
+                EntryDate = x.EntryDate,
+                Amount = x.Amount,
+                Location = new Location
+                {
+                    Id = x.Location.Id,
+                    Name = x.Location.Name
+                }
+            });
+        }
     }
 }

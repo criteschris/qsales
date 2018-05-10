@@ -1,0 +1,11 @@
+@model System.Collections.Generic.IEnumerable<qsales.Models.Condition>
+
+@{
+    ViewData["Title"] = "Manage Conditions";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/manage-conditions.js" asp-append-version="true"></script>
+}

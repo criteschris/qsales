@@ -8,12 +8,51 @@ namespace qsales.Extensions
     {
         public static void EnsureSeedData(this QSalesDbContext context)
         {
+            if (!context.Condition.Any())
+            {
+                context.Condition.AddRange(
+                    new Condition { Name = "Sunny" },
+                    new Condition { Name = "Rain" },
+                    new Condition { Name = "Snow" }
+                );
+            }
+
             if (!context.Employee.Any())
             {
                 context.Employee.AddRange(
                     new Employee { Name = "John Doe" },
                     new Employee { Name = "Jane Doe" },
                     new Employee { Name = "Joe Doe" }
+                );
+            }
+
+            if (!context.OperationHour.Any())
+            {
+                context.OperationHour.AddRange(
+                    new OperationHour { Name = "12 am" },
+                    new OperationHour { Name = "1 am" },
+                    new OperationHour { Name = "2 am" },
+                    new OperationHour { Name = "3 am" },
+                    new OperationHour { Name = "4 am" },
+                    new OperationHour { Name = "5 am" },
+                    new OperationHour { Name = "6 am" },
+                    new OperationHour { Name = "7 am" },
+                    new OperationHour { Name = "8 am" },
+                    new OperationHour { Name = "9 am" },
+                    new OperationHour { Name = "10 am" },
+                    new OperationHour { Name = "11 am" },
+                    new OperationHour { Name = "12 pm" },
+                    new OperationHour { Name = "1 pm" },
+                    new OperationHour { Name = "2 pm" },
+                    new OperationHour { Name = "3 pm" },
+                    new OperationHour { Name = "4 pm" },
+                    new OperationHour { Name = "5 pm" },
+                    new OperationHour { Name = "6 pm" },
+                    new OperationHour { Name = "7 pm" },
+                    new OperationHour { Name = "8 pm" },
+                    new OperationHour { Name = "9 pm" },
+                    new OperationHour { Name = "10 pm" },
+                    new OperationHour { Name = "11 pm" }
                 );
             }
 
@@ -109,15 +148,6 @@ namespace qsales.Extensions
                     new SalesByProductType { ProductTypeId = 2, Amount = 2509.77M, EntryDate = DateTime.Now.AddDays(-2) },
                     new SalesByProductType { ProductTypeId = 2, Amount = 1208.34M, EntryDate = DateTime.Now.AddDays(-1) },
                     new SalesByProductType { ProductTypeId = 2, Amount = 5279.53M, EntryDate = DateTime.Now }
-                );
-            }
-
-            if (!context.Weather.Any())
-            {
-                context.Weather.AddRange(
-                    new Weather { Name = "Sunny" },
-                    new Weather { Name = "Rain" },
-                    new Weather { Name = "Snow" }
                 );
             }
 

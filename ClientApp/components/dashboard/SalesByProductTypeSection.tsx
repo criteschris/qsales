@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { map, path, prop } from 'ramda';
+import { compose, map, path, prop, sum } from 'ramda';
 
 import { ConvertToCurrencyString } from '../../converters/MoneyConverters';
 
@@ -8,6 +8,8 @@ import { ISalesByProductType } from '../../types/ISalesByProductType';
 export interface SalesByProductTypeSectionProps {
     sales: ISalesByProductType[];
 }
+
+const calculateTotalSales = (sales: ISalesByProductType[]) => compose<ISalesByProductType[], number[], number, string>(ConvertToCurrencyString, sum, map(s => s.amount))(sales);
 
 const renderProductRows = (data) => {
     return map((d: ISalesByProductType) => {
@@ -25,7 +27,7 @@ export const SalesByProductTypeSection = (props: SalesByProductTypeSectionProps)
         <div>
             <h4>Sales totals categorized by product</h4>
             <div className='panel panel-default'>
-                <div className='panel-body'>
+                {/* <div className='panel-body'> */}
                     <table className='table table-striped'>
                         <thead>
                             <tr>
@@ -37,6 +39,16 @@ export const SalesByProductTypeSection = (props: SalesByProductTypeSectionProps)
                             {renderProductRows(props.sales)}
                         </tbody>
                     </table>
+                {/* </div> */}
+                <div className='panel-footer'>
+                    <div className='row'>
+                        <div className='col-xs-6'>
+                            <strong>Total Sales: </strong>
+                        </div>
+                        <div className='col-xs-6 text-right'>
+                            <strong>{calculateTotalSales(props.sales)}</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

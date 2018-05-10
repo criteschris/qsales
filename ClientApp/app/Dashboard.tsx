@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import * as moment from 'moment';
 
 import { Container } from './Container';
 import { SalesSection } from '../components/dashboard/SalesSection';
 import { SalesByProductTypeSection } from '../components/dashboard/SalesByProductTypeSection';
 import { SalesByLocationSection } from '../components/dashboard/SalesByLocationSection';
+import { SalesByHourSection } from '../components/dashboard/SalesByHourSection';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
 
 import { ISales } from '../types/ISales';
@@ -13,8 +13,11 @@ import { ISalesByHour } from '../types/ISalesByHour';
 import { ISalesByLocation } from '../types/ISalesByLocation';
 import { ISalesByProductType } from '../types/ISalesByProductType';
 import { IDashboardInitialState } from '../types/IDashboardInitialState';
+import { IOperationHour } from '../types/IOperationHour';
 
+import { addDays } from 'office-ui-fabric-react/lib/Utilities/dateMath/DateMath';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
+
 
 export interface DashboardProps {
 
@@ -26,6 +29,7 @@ export interface DashboardState {
     salesByHour: ISalesByHour[];
     salesByLocation: ISalesByLocation[];
     salesByProductType: ISalesByProductType[];
+    operationHours: IOperationHour[];
 }
 
 export class Dashboard extends React.Component<DashboardProps, DashboardState>{
@@ -35,17 +39,18 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
         const initialState: IDashboardInitialState = (window as any).initialState;
 
         this.state = {
-            currentEntryDate: moment().add(-1, 'days').toDate(),
+            currentEntryDate: addDays(new Date(), -1),
             sales: initialState.sales,
             salesByHour: initialState.salesByHour,
             salesByLocation: initialState.salesByLocation,
-            salesByProductType: initialState.salesByProductType
+            salesByProductType: initialState.salesByProductType,
+            operationHours: initialState.operationHours
         };
     }
 
     @autobind
     private _getSalesForEntryDate(entryDate: Date): Promise<void> {
-        return fetch('/home/getsales?entryDate=' + moment(entryDate).toISOString(), {
+        return fetch('/home/getsales?entryDate=' +  entryDate.toISOString(), {
             method: 'GET'
         }).then(response => {
             if (response.ok) {
@@ -81,6 +86,7 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
                     <div className='col-lg-3 col-md-6 col-sm-9 col-xs-12'>
                         <DatePicker
                             value={this.state.currentEntryDate}
+                            maxDate={addDays(new Date(), -1)}
                             onSelectDate={this._onEntryDateChanged}
                         />
                     </div>
@@ -98,6 +104,12 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
                         />
                         <SalesByLocationSection
                             sales={this.state.salesByLocation}
+                        />
+                    </div>
+                    <div className='col-lg-6 col-xs-12'>
+                        <SalesByHourSection
+                            sales={this.state.salesByHour}
+                            operationHours={this.state.operationHours}
                         />
                     </div>
                 </div>

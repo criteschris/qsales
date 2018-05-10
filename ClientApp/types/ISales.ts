@@ -1,3 +1,5 @@
+import { IIndexableObject } from "./IIndexableObject";
+
 export interface ISales {
     id: number;
     entryDate: Date;

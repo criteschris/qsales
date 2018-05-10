@@ -46,6 +46,7 @@ namespace qsales
 
             //Setup DI services
             services.AddScoped<ISalesRepository, SalesRepository>();
+            services.AddScoped<IFacetRepository, FacetRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

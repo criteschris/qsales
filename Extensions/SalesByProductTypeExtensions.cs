@@ -11,5 +11,21 @@ namespace qsales.Extensions
         {
             return source.Include("ProductType");
         }
+
+        public static IQueryable<SalesByProductType> MakeSerializable(this IQueryable<SalesByProductType> source)
+        {
+            return source.Select(x => new SalesByProductType
+            {
+                Id = x.Id,
+                ProductTypeId = x.ProductTypeId,
+                EntryDate = x.EntryDate,
+                Amount = x.Amount,
+                ProductType = new ProductType
+                {
+                    Id = x.ProductType.Id,
+                    Name = x.ProductType.Name
+                }
+            });
+        }
     }
 }

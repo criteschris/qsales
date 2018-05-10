@@ -1,4 +1,3 @@
-export interface ILocation {
-    id: number;
-    name: string;
-}
+import { IFacet } from "./IFacet";
+
+export interface ILocation extends IFacet {}

@@ -1,0 +1,11 @@
+@model System.Collections.Generic.IEnumerable<qsales.Models.Location>
+
+@{
+    ViewData["Title"] = "Manage Locations";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/manage-locations.js" asp-append-version="true"></script>
+}

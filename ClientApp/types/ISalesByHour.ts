@@ -1,11 +1,13 @@
-import { IWeather } from './IWeather';
+import { ICondition } from './ICondition';
+import { IOperationHour } from './IOperationHour';
 
 export interface ISalesByHour {
     id: number;
-    weatherId: number;
+    operationHourId: number;
+    conditionId: number;
     entryDate: Date;
-    hour: number;
     amount: number;
     customers: number;
-    weather: IWeather;
+    operationHour: IOperationHour;
+    condition: ICondition;
 }

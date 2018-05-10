@@ -5,7 +5,12 @@ module.exports = {
     entry: {
         'whatwg-fetch': 'whatwg-fetch',
         'dashboard': './ClientApp/app/Dashboard.tsx',
-        'sales-entry': './ClientApp/app/SalesEntry.tsx'
+        'sales-entry': './ClientApp/app/SalesEntry.tsx',
+        'manage-conditions': './ClientApp/app/admin/Conditions',
+        'manage-employees': './ClientApp/app/admin/Employees',
+        'manage-locations': './ClientApp/app/admin/Locations',
+        'manage-operationhours': './ClientApp/app/admin/OperationHours',
+        'manage-producttypes': './ClientApp/app/admin/ProductTypes'
     },
     output: {
         path: path.resolve(__dirname, 'wwwroot'),

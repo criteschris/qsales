@@ -11,7 +11,7 @@ using System;
 namespace qsales.Migrations
 {
     [DbContext(typeof(QSalesDbContext))]
-    [Migration("20180508142710_InitialCreate")]
+    [Migration("20180510144542_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,18 @@ namespace qsales.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("qsales.Models.Condition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Condition");
+                });
 
             modelBuilder.Entity("qsales.Models.Employee", b =>
                 {
@@ -43,6 +55,18 @@ namespace qsales.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("qsales.Models.OperationHour", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationHour");
                 });
 
             modelBuilder.Entity("qsales.Models.Payroll", b =>
@@ -106,17 +130,19 @@ namespace qsales.Migrations
 
                     b.Property<int>("Amount");
 
+                    b.Property<int>("ConditionId");
+
                     b.Property<int>("Customers");
 
                     b.Property<DateTime>("EntryDate");
 
-                    b.Property<int>("Hour");
-
-                    b.Property<int>("WeatherId");
+                    b.Property<int>("OperationHourId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WeatherId");
+                    b.HasIndex("ConditionId");
+
+                    b.HasIndex("OperationHourId");
 
                     b.ToTable("SalesByHour");
                 });
@@ -157,38 +183,31 @@ namespace qsales.Migrations
                     b.ToTable("SalesByProductType");
                 });
 
-            modelBuilder.Entity("Weather", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Weather");
-                });
-
             modelBuilder.Entity("qsales.Models.Payroll", b =>
                 {
                     b.HasOne("qsales.Models.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("Payrolls")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("qsales.Models.SalesByHour", b =>
                 {
-                    b.HasOne("Weather", "Weather")
-                        .WithMany()
-                        .HasForeignKey("WeatherId")
+                    b.HasOne("qsales.Models.Condition", "Condition")
+                        .WithMany("SalesByHours")
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("qsales.Models.OperationHour", "OperationHour")
+                        .WithMany("SalesByHours")
+                        .HasForeignKey("OperationHourId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("qsales.Models.SalesByLocation", b =>
                 {
                     b.HasOne("qsales.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("SalesByLocations")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -196,7 +215,7 @@ namespace qsales.Migrations
             modelBuilder.Entity("qsales.Models.SalesByProductType", b =>
                 {
                     b.HasOne("qsales.Models.ProductType", "ProductType")
-                        .WithMany()
+                        .WithMany("SalesByProductTypes")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

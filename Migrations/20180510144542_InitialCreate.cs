@@ -10,6 +10,19 @@ namespace qsales.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Condition",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Condition", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employee",
                 columns: table => new
                 {
@@ -33,6 +46,19 @@ namespace qsales.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Location", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OperationHour",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperationHour", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,19 +92,6 @@ namespace qsales.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sales", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Weather",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Weather", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,6 +136,35 @@ namespace qsales.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SalesByHour",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Amount = table.Column<int>(nullable: false),
+                    ConditionId = table.Column<int>(nullable: false),
+                    Customers = table.Column<int>(nullable: false),
+                    EntryDate = table.Column<DateTime>(nullable: false),
+                    OperationHourId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesByHour", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SalesByHour_Condition_ConditionId",
+                        column: x => x.ConditionId,
+                        principalTable: "Condition",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SalesByHour_OperationHour_OperationHourId",
+                        column: x => x.OperationHourId,
+                        principalTable: "OperationHour",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SalesByProductType",
                 columns: table => new
                 {
@@ -143,38 +185,20 @@ namespace qsales.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "SalesByHour",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Amount = table.Column<int>(nullable: false),
-                    Customers = table.Column<int>(nullable: false),
-                    EntryDate = table.Column<DateTime>(nullable: false),
-                    Hour = table.Column<int>(nullable: false),
-                    WeatherId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SalesByHour", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SalesByHour_Weather_WeatherId",
-                        column: x => x.WeatherId,
-                        principalTable: "Weather",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Payroll_EmployeeId",
                 table: "Payroll",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SalesByHour_WeatherId",
+                name: "IX_SalesByHour_ConditionId",
                 table: "SalesByHour",
-                column: "WeatherId");
+                column: "ConditionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SalesByHour_OperationHourId",
+                table: "SalesByHour",
+                column: "OperationHourId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SalesByLocation_LocationId",
@@ -208,7 +232,10 @@ namespace qsales.Migrations
                 name: "Employee");
 
             migrationBuilder.DropTable(
-                name: "Weather");
+                name: "Condition");
+
+            migrationBuilder.DropTable(
+                name: "OperationHour");
 
             migrationBuilder.DropTable(
                 name: "Location");

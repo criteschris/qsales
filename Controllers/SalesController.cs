@@ -13,15 +13,17 @@ namespace qsales.Controllers
     //[Authorize]
     public class SalesController : Controller
     {
-        private ISalesRepository _repository;
+        private readonly ISalesRepository _salesRepository;
+        private readonly IFacetRepository _facetRepository;
 
-        public SalesController(ISalesRepository repository)
+        public SalesController(ISalesRepository salesRepository, IFacetRepository facetRepository)
         {
-            _repository = repository;
+            _salesRepository = salesRepository;
+            _facetRepository = facetRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _facetRepository.GetFacetsAsync());
         }
 
         [AllowAnonymous]
@@ -33,7 +35,7 @@ namespace qsales.Controllers
         [HttpPost]
         public async Task<IActionResult> PostSales([FromQuery] DateTime entryDate)
         {
-            return Json(await _repository.GetSalesByDateAsync(entryDate));
+            return Json(await _salesRepository.GetSalesByDateAsync(entryDate));
         }
     }
 }
