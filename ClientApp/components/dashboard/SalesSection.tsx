@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { prop } from 'ramda';
 
 import {
-    SumFiveDollarBills,
-    SumTenDollarBills,
-    SumTwentyDollarBills,
-    SumFiftyDollarBills,
-    SumHundredDollarBills,
+    /* SumFives,
+    SumTens,
+    Sumtwenties,
+    Sumfifties,
+    SumHundreds, */
     ConvertToCurrencyString,
     SumCashFromCurrencies
 } from '../../converters/MoneyConverters';
@@ -16,8 +17,8 @@ export interface SalesSectionProps {
     sales: ISales;
 }
 
-const calculateCashTotal = (sales: ISales) => SumCashFromCurrencies(sales.oneDollarBills, sales.fiveDollarBills, sales.tenDollarBills, sales.twentyDollarBills, sales.fiftyDollarBills, sales.hundredDollarBills);
-const calculateTotalSales = (sales: ISales) => SumCashFromCurrencies(sales.oneDollarBills, sales.fiveDollarBills, sales.tenDollarBills, sales.twentyDollarBills, sales.fiftyDollarBills, sales.hundredDollarBills, sales.creditCardAmount);
+const calculateCashTotal = (sales: ISales) => SumCashFromCurrencies(sales.ones, sales.fives, sales.tens, sales.twenties, sales.fifties, sales.hundreds);
+const calculateTotalSales = (sales: ISales) => SumCashFromCurrencies(sales.ones, sales.fives, sales.tens, sales.twenties, sales.fifties, sales.hundreds, sales.creditCardAmount);
 
 export const SalesSection = (props: SalesSectionProps) => {
     return (
@@ -29,53 +30,44 @@ export const SalesSection = (props: SalesSectionProps) => {
                         <thead>
                             <tr>
                                 <th>Bills</th>
-                                <th>Count</th>
-                                <th className='text-right'>Total</th>
+                                <th className='text-right'>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>100's</td>
-                                <td>{props.sales.hundredDollarBills}</td>
-                                <td className='text-right'>${SumHundredDollarBills(props.sales.hundredDollarBills)}</td>
+                                <td className='text-right'>{ConvertToCurrencyString(prop('hundreds', props.sales))}</td>
                             </tr>
                             <tr>
                                 <td>50's</td>
-                                <td>{props.sales.fiftyDollarBills}</td>
-                                <td className='text-right'>${SumFiftyDollarBills(props.sales.fiftyDollarBills)}</td>
+                                <td className='text-right'>{ConvertToCurrencyString(prop('fifties', props.sales))}</td>
                             </tr>
                             <tr>
                                 <td>20's</td>
-                                <td>{props.sales.twentyDollarBills}</td>
-                                <td className='text-right'>${SumTwentyDollarBills(props.sales.twentyDollarBills)}</td>
+                                <td className='text-right'>{ConvertToCurrencyString(prop('twenties', props.sales))}</td>
                             </tr>
                             <tr>
                                 <td>10's</td>
-                                <td>{props.sales.tenDollarBills}</td>
-                                <td className='text-right'>${SumTenDollarBills(props.sales.tenDollarBills)}</td>
+                                <td className='text-right'>{ConvertToCurrencyString(prop('tens', props.sales))}</td>
                             </tr>
                             <tr>
                                 <td>5's</td>
-                                <td>{props.sales.fiveDollarBills}</td>
-                                <td className='text-right'>${SumFiveDollarBills(props.sales.fiveDollarBills)}</td>
+                                <td className='text-right'>{ConvertToCurrencyString(prop('fives', props.sales))}</td>
                             </tr>
                             <tr>
                                 <td>1's</td>
-                                <td>{props.sales.oneDollarBills}</td>
-                                <td className='text-right'>${props.sales.oneDollarBills}</td>
+                                <td className='text-right'>{ConvertToCurrencyString(prop('ones', props.sales))}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <strong>Total Cash:</strong>
                                 </td>
-                                <td></td>
                                 <td className='text-right'>
                                     <strong>{calculateCashTotal(props.sales)}</strong>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Credit</td>
-                                <td></td>
                                 <td className='text-right'>{ConvertToCurrencyString(props.sales.creditCardAmount)}</td>
                             </tr>
                         </tbody>

@@ -4,6 +4,7 @@ const path = require('path');
 module.exports = {
     entry: {
         'whatwg-fetch': 'whatwg-fetch',
+        'home': './ClientApp/app/Home.tsx',
         'dashboard': './ClientApp/app/Dashboard.tsx',
         'sales-entry': './ClientApp/app/SalesEntry.tsx',
         'manage-conditions': './ClientApp/app/admin/Conditions',

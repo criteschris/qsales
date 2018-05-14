@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using qsales.Models;
@@ -17,9 +18,10 @@ namespace qsales.Extensions
             return source.Select(x => new SalesByHour
             {
                 Id = x.Id,
+                SalesId = x.SalesId,
                 OperationHourId = x.OperationHourId,
                 ConditionId = x.ConditionId,
-                EntryDate = x.EntryDate,
+                //EntryDate = x.EntryDate,
                 Amount = x.Amount,
                 OperationHour = new OperationHour
                 {

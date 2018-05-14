@@ -17,8 +17,9 @@ namespace qsales.Extensions
             return source.Select(x => new SalesByProductType
             {
                 Id = x.Id,
+                SalesId = x.SalesId,
                 ProductTypeId = x.ProductTypeId,
-                EntryDate = x.EntryDate,
+                //EntryDate = x.EntryDate,
                 Amount = x.Amount,
                 ProductType = new ProductType
                 {

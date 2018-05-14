@@ -17,8 +17,9 @@ namespace qsales.Extensions
             return source.Select(x => new SalesByLocation
             {
                 Id = x.Id,
+                SalesId = x.SalesId,
                 LocationId = x.LocationId,
-                EntryDate = x.EntryDate,
+                //EntryDate = x.EntryDate,
                 Amount = x.Amount,
                 Location = new Location
                 {

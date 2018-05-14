@@ -9,6 +9,7 @@ import { SalesByProductType } from '../components/salesentry/SalesByProductType'
 import { SalesByHour } from '../components/salesentry/SalesByHour';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { validate, validateArray } from '../validators/ValidationManager';
 import { SalesValidators, SalesByHourValidators, SalesByLocationValidators, SalesByProductTypeValidators } from '../validators';
@@ -61,12 +62,12 @@ export class SalesEntry extends React.Component<SalesEntryProps, SalesEntryState
             operationHours: initialState.operationHours,
             conditions: initialState.conditions,
             sales: {
-                hundredDollarBills: 0,
-                fiftyDollarBills: 0,
-                twentyDollarBills: 0,
-                tenDollarBills: 0,
-                fiveDollarBills: 0,
-                oneDollarBills: 0,
+                hundreds: 0,
+                fifties: 0,
+                twenties: 0,
+                tens: 0,
+                fives: 0,
+                ones: 0,
                 creditCardAmount: 0
             } as ISales,
             salesByLocation: map(l => (

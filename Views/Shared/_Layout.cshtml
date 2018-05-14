@@ -33,15 +33,16 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Sales" asp-action="Index">Enter Sales</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Dashboard" asp-route-b='@ViewData["b"]'>Dashboard</a></li>
+                    <li><a asp-area="" asp-controller="Sales" asp-action="Index" asp-route-b='@ViewData["b"]'>Enter Sales</a></li>
                     <li class='dropdown'>
                         <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup="true" aria-expanded="false">Admin <span class='caret'></span></a>
                         <ul class='dropdown-menu'>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="Conditions">Conditions</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="Employees">Employees</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="Locations">Locations</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="OperationHours">Operation Hours</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="ProductTypes">Product Types</a></li>
+                            <li><a asp-area="" asp-controller="Admin", asp-action="Conditions" asp-route-b='@ViewData["b"]'>Conditions</a></li>
+                            <li><a asp-area="" asp-controller="Admin", asp-action="Employees" asp-route-b='@ViewData["b"]'>Employees</a></li>
+                            <li><a asp-area="" asp-controller="Admin", asp-action="Locations" asp-route-b='@ViewData["b"]'>Locations</a></li>
+                            <li><a asp-area="" asp-controller="Admin", asp-action="OperationHours" asp-route-b='@ViewData["b"]'>Operation Hours</a></li>
+                            <li><a asp-area="" asp-controller="Admin", asp-action="ProductTypes" asp-route-b='@ViewData["b"]'>Product Types</a></li>
                         </ul>
                     </li>
                 </ul>

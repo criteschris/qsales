@@ -6,8 +6,8 @@ import { IOperationHour } from "./IOperationHour";
 
 export interface IDashboardInitialState {
     sales: ISales;
-    salesByHour: ISalesByHour[];
-    salesByLocation: ISalesByLocation[];
-    salesByProductType: ISalesByProductType[];
+    //salesByHour: ISalesByHour[];
+    //salesByLocation: ISalesByLocation[];
+    //salesByProductType: ISalesByProductType[];
     operationHours: IOperationHour[];
 }

@@ -1,12 +1,11 @@
-﻿@model System.Collections.Generic.IEnumerable<qsales.Models.Bar>
+﻿@model qsales.Models.DashboardViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-
 <app redux-initial-state="Model" container-element-id="react-app"></app>
 
 @section scripts {
-    <script src="~/js/home.js" asp-append-version="true"></script>
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
 }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import { compose, defaultTo, path, prop } from 'ramda';
 
 import { Container } from './Container';
 import { SalesSection } from '../components/dashboard/SalesSection';
@@ -26,13 +27,24 @@ export interface DashboardProps {
 export interface DashboardState {
     currentEntryDate: Date;
     sales: ISales;
-    salesByHour: ISalesByHour[];
-    salesByLocation: ISalesByLocation[];
-    salesByProductType: ISalesByProductType[];
+    salesByHours: ISalesByHour[];
+    salesByLocations: ISalesByLocation[];
+    salesByProductTypes: ISalesByProductType[];
     operationHours: IOperationHour[];
 }
 
 export class Dashboard extends React.Component<DashboardProps, DashboardState>{
+    private getSalesOrDefault = compose<IDashboardInitialState, ISales, ISales>(defaultTo({} as ISales), prop('sales'));
+    private getSalesByHoursOrDefault = compose<IDashboardInitialState, ISalesByHour[], ISalesByHour[]>(defaultTo([]), path(['sales', 'salesByHours']));
+    private getSalesByLocationOrDefault = compose<IDashboardInitialState, ISalesByLocation[], ISalesByLocation[]>(defaultTo([]), path(['sales', 'salesByLocations']));
+    private getSalesByProductTypeOrDefault = compose<IDashboardInitialState, ISalesByProductType[], ISalesByProductType[]>(defaultTo([]), path(['sales', 'salesByProductTypes']));
+    private getUrlParameter = (name) => {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
     constructor(props: DashboardProps) {
         super(props);
 
@@ -40,17 +52,19 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
 
         this.state = {
             currentEntryDate: addDays(new Date(), -1),
-            sales: initialState.sales,
-            salesByHour: initialState.salesByHour,
-            salesByLocation: initialState.salesByLocation,
-            salesByProductType: initialState.salesByProductType,
+            sales: this.getSalesOrDefault(initialState),
+            salesByHours: this.getSalesByHoursOrDefault(initialState),
+            salesByLocations: this.getSalesByLocationOrDefault(initialState),
+            salesByProductTypes: this.getSalesByProductTypeOrDefault(initialState),
             operationHours: initialState.operationHours
         };
     }
 
     @autobind
     private _getSalesForEntryDate(entryDate: Date): Promise<void> {
-        return fetch('/home/getsales?entryDate=' +  entryDate.toISOString(), {
+        const barId = this.getUrlParameter('b');
+
+        return fetch(`/home/getsales?b=${barId}&entryDate=${entryDate.toISOString()}`, {
             method: 'GET'
         }).then(response => {
             if (response.ok) {
@@ -60,10 +74,10 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
             return {};
         }).then((salesData: IDashboardInitialState) => {
             this.setState({
-                sales: salesData.sales,
-                salesByHour: salesData.salesByHour,
-                salesByLocation: salesData.salesByLocation,
-                salesByProductType: salesData.salesByProductType
+                sales: this.getSalesOrDefault(salesData),
+                salesByHours: this.getSalesByHoursOrDefault(salesData),
+                salesByLocations: this.getSalesByLocationOrDefault(salesData),
+                salesByProductTypes: this.getSalesByProductTypeOrDefault(salesData)
             });
         });
     }
@@ -100,15 +114,15 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
                     </div>
                     <div className='col-lg-3 col-md-6 col-xs-12'>
                         <SalesByProductTypeSection
-                            sales={this.state.salesByProductType}
+                            sales={this.state.salesByProductTypes}
                         />
                         <SalesByLocationSection
-                            sales={this.state.salesByLocation}
+                            sales={this.state.salesByLocations}
                         />
                     </div>
                     <div className='col-lg-6 col-xs-12'>
                         <SalesByHourSection
-                            sales={this.state.salesByHour}
+                            sales={this.state.salesByHours}
                             operationHours={this.state.operationHours}
                         />
                     </div>

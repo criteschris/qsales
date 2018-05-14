@@ -21,7 +21,13 @@ namespace qsales.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _repository.GetSalesByDateAsync(DateTime.Now.AddDays(-1).Date));
+            return View(await _repository.GetBars());
+        }
+
+        public async Task<IActionResult> Dashboard([FromQuery] Guid b)
+        {
+            ViewData["b"] = b;
+            return View(await _repository.GetSalesByDateAsync(b, DateTime.Now.AddDays(-1).Date));
         }
 
         public IActionResult About()
@@ -45,9 +51,9 @@ namespace qsales.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSales([FromQuery] DateTime entryDate)
+        public async Task<IActionResult> GetSales([FromQuery] Guid b, [FromQuery] DateTime entryDate)
         {
-            return Json(await _repository.GetSalesByDateAsync(entryDate));
+            return Json(await _repository.GetSalesByDateAsync(b, entryDate));
         }
     }
 }

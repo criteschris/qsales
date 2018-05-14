@@ -42,7 +42,7 @@ namespace qsales
             services.AddDbContext<QSalesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("QSales")));
 
             //Require HTTPS
-            services.AddMvc(/* options => options.Filters.Add(new RequireHttpsAttribute()) */);
+            services.AddMvc(options => options.Filters.Add(new RequireHttpsAttribute()));
 
             //Setup DI services
             services.AddScoped<ISalesRepository, SalesRepository>();
@@ -70,9 +70,9 @@ namespace qsales
             }
 
             //redirect to HTTPS before handling any requests
-            /* var options = new RewriteOptions().AddRedirectToHttps();
+            var options = new RewriteOptions().AddRedirectToHttps();
             app.UseRewriter(options);
- */
+
             app.UseStaticFiles();
 
             app.UseAuthentication();

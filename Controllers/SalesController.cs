@@ -21,8 +21,14 @@ namespace qsales.Controllers
             _salesRepository = salesRepository;
             _facetRepository = facetRepository;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] Guid b)
         {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
             return View(await _facetRepository.GetFacetsAsync());
         }
 
@@ -33,9 +39,9 @@ namespace qsales.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostSales([FromQuery] DateTime entryDate)
+        public async Task<IActionResult> PostSales([FromQuery] Guid b, [FromQuery] DateTime entryDate)
         {
-            return Json(await _salesRepository.GetSalesByDateAsync(entryDate));
+            return Json(await _salesRepository.GetSalesByDateAsync(b, entryDate));
         }
     }
 }

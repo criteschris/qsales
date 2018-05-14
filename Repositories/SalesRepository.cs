@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using qsales.Models;
 using qsales.Extensions;
+using System.Collections.Generic;
 
 namespace qsales.Repositories
 {
@@ -16,28 +17,38 @@ namespace qsales.Repositories
             _context = context;
         }
 
-        public async Task<DashboardViewModel> GetSalesByDateAsync(DateTime entryDate)
+        public async Task<IEnumerable<Bar>> GetBars() {
+            return await _context.Bar.ToListAsync();
+        }
+
+        public async Task<DashboardViewModel> GetSalesByDateAsync(Guid b, DateTime entryDate)
         {
-            var salesTask = _context.Sales.AsNoTracking().GetEntryForDate(entryDate).FirstOrDefaultAsync();
-            var salesByHourTask = _context.SalesByHour.AsNoTracking().GetEntryForDate(entryDate).IncludeCondition().MakeSerializable().ToListAsync();
+            var salesTask = _context.Sales
+                .AsNoTracking()
+                .GetByBar(b)
+                .GetEntryForDate(entryDate)
+                .IncludeSalesBy()
+                .MakeSerializable()
+                .FirstOrDefaultAsync();
+            /* var salesByHourTask = _context.SalesByHour.AsNoTracking().GetEntryForDate(entryDate).IncludeCondition().MakeSerializable().ToListAsync();
             var salesByLocationTask = _context.SalesByLocation.AsNoTracking().GetEntryForDate(entryDate).IncludeLocation().MakeSerializable().ToListAsync();
-            var salesByProductTypeTask = _context.SalesByProductType.AsNoTracking().GetEntryForDate(entryDate).IncludeProductType().MakeSerializable().ToListAsync();
+            var salesByProductTypeTask = _context.SalesByProductType.AsNoTracking().GetEntryForDate(entryDate).IncludeProductType().MakeSerializable().ToListAsync(); */
             var operationHoursTask = _context.OperationHour.AsNoTracking().ToListAsync();
 
             await Task.WhenAll(new Task[] {
                 salesTask,
-                salesByHourTask,
+                /* salesByHourTask,
                 salesByLocationTask,
-                salesByProductTypeTask,
+                salesByProductTypeTask, */
                 operationHoursTask
             });
 
             return new DashboardViewModel
             {
                 Sales = salesTask.Result,
-                SalesByHour = salesByHourTask.Result,
+                /* SalesByHour = salesByHourTask.Result,
                 SalesByLocation = salesByLocationTask.Result,
-                SalesByProductType = salesByProductTypeTask.Result,
+                SalesByProductType = salesByProductTypeTask.Result, */
                 OperationHours = operationHoursTask.Result
             };
         }

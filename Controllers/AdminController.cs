@@ -20,24 +20,58 @@ namespace qsales.Controllers
             _repository = repository;
         }
 
-        public async Task<IActionResult> Conditions(){
+        public async Task<IActionResult> Conditions([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
             return View(await _repository.GetConditionsAsync());
         }
 
-        public async Task<IActionResult> Employees(){
+        public async Task<IActionResult> Employees([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
             return View(await _repository.GetEmployeesAsync());
         }
 
-        public async Task<IActionResult> Locations(){
+        public async Task<IActionResult> Locations([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
             return View(await _repository.GetLocationsAsync());
         }
 
-        public async Task<IActionResult> OperationHours()
+        public async Task<IActionResult> OperationHours([FromQuery] Guid b)
         {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
             return View(await _repository.GetOperationHoursAsync());
         }
 
-        public async Task<IActionResult> ProductTypes(){
+        public async Task<IActionResult> ProductTypes([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
             return View(await _repository.GetProductTypesAsync());
         }
 
