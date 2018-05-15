@@ -5,6 +5,8 @@ import { Promise } from 'es6-promise';
 import { Container } from '../Container';
 import { FacetList } from '../../components/FacetList';
 
+import { getUrlParameter } from '../../utilities/UriUtilities';
+
 import { IFacet } from '../../types/IFacet';
 
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
@@ -14,8 +16,10 @@ export const ManageProductTypes = () => {
     const initialState = (window as any).initialState as IFacet[];
 
     const onSave = (facets: IFacet[]): Promise<IFacet[]> => {
+        const barId = getUrlParameter('b', window.location.search);
+
         return new Promise((resolve, reject) => {
-            fetch('/admin/saveproducttypes', {
+            fetch(`/admin/saveproducttypes?b=${barId}`, {
                 method: 'POST',
                 body: JSON.stringify(facets),
                 headers: {

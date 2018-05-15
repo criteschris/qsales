@@ -10,24 +10,58 @@ using qsales.Repositories;
 
 namespace qsales.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
-        private ISalesRepository _repository;
+        private readonly ISalesRepository _salesRepository;
+        private readonly IFacetRepository _facetRepository;
 
-        public HomeController(ISalesRepository repository)
+        public HomeController(ISalesRepository salesRepository, IFacetRepository facetRepository)
         {
-            _repository = repository;
+            _salesRepository = salesRepository;
+            _facetRepository = facetRepository;
         }
         public async Task<IActionResult> Index()
         {
-            return View(await _repository.GetBars());
+            return View(await _facetRepository.GetBars());
         }
 
         public async Task<IActionResult> Dashboard([FromQuery] Guid b)
         {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
             ViewData["b"] = b;
-            return View(await _repository.GetSalesByDateAsync(b, DateTime.Now.AddDays(-1).Date));
+
+            var salesTask = _salesRepository.GetSalesByDateAsync(b, DateTime.Now.AddDays(-1).Date);
+            var hoursTask = _facetRepository.GetOperationHoursAsync();
+
+            await Task.WhenAll(new Task[] {
+                salesTask,
+                hoursTask
+            });
+
+            DashboardViewModel vm = new DashboardViewModel
+            {
+                Sales = salesTask.Result,
+                OperationHours = hoursTask.Result
+            };
+
+            return View(vm);
+        }
+
+        [Authorize("MyAdminRole")]
+        public async Task<IActionResult> Report([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
+            return View(await _salesRepository.GetReportPageViewModelAsync(b));
         }
 
         public IActionResult About()
@@ -53,7 +87,13 @@ namespace qsales.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSales([FromQuery] Guid b, [FromQuery] DateTime entryDate)
         {
-            return Json(await _repository.GetSalesByDateAsync(b, entryDate));
+            return Json(await _salesRepository.GetSalesByDateAsync(b, entryDate));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSalesReportData([FromQuery] Guid b, [FromQuery] int dw, [FromQuery] int e, [FromQuery] int o, [FromQuery] int p)
+        {
+            return Json(await _salesRepository.GetSalesReportDataAsync(b, dw, e, o, p));
         }
     }
 }

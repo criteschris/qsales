@@ -17,6 +17,7 @@ import { IDashboardInitialState } from '../types/IDashboardInitialState';
 import { IOperationHour } from '../types/IOperationHour';
 
 import { addDays } from 'office-ui-fabric-react/lib/Utilities/dateMath/DateMath';
+import { getUrlParameter } from '../utilities/UriUtilities';
 import { autobind } from 'office-ui-fabric-react/lib/Utilities';
 
 
@@ -34,16 +35,10 @@ export interface DashboardState {
 }
 
 export class Dashboard extends React.Component<DashboardProps, DashboardState>{
-    private getSalesOrDefault = compose<IDashboardInitialState, ISales, ISales>(defaultTo({} as ISales), prop('sales'));
-    private getSalesByHoursOrDefault = compose<IDashboardInitialState, ISalesByHour[], ISalesByHour[]>(defaultTo([]), path(['sales', 'salesByHours']));
-    private getSalesByLocationOrDefault = compose<IDashboardInitialState, ISalesByLocation[], ISalesByLocation[]>(defaultTo([]), path(['sales', 'salesByLocations']));
-    private getSalesByProductTypeOrDefault = compose<IDashboardInitialState, ISalesByProductType[], ISalesByProductType[]>(defaultTo([]), path(['sales', 'salesByProductTypes']));
-    private getUrlParameter = (name) => {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    };
+    private getSalesOrDefault = compose<ISales, ISales>(defaultTo({} as ISales));
+    private getSalesByHoursOrDefault = compose<ISales, ISalesByHour[], ISalesByHour[]>(defaultTo([]), prop('salesByHours'));
+    private getSalesByLocationOrDefault = compose<ISales, ISalesByLocation[], ISalesByLocation[]>(defaultTo([]), prop('salesByLocations'));
+    private getSalesByProductTypeOrDefault = compose<ISales, ISalesByProductType[], ISalesByProductType[]>(defaultTo([]), prop('salesByProductTypes'));
 
     constructor(props: DashboardProps) {
         super(props);
@@ -52,17 +47,17 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
 
         this.state = {
             currentEntryDate: addDays(new Date(), -1),
-            sales: this.getSalesOrDefault(initialState),
-            salesByHours: this.getSalesByHoursOrDefault(initialState),
-            salesByLocations: this.getSalesByLocationOrDefault(initialState),
-            salesByProductTypes: this.getSalesByProductTypeOrDefault(initialState),
+            sales: this.getSalesOrDefault(initialState.sales),
+            salesByHours: this.getSalesByHoursOrDefault(initialState.sales),
+            salesByLocations: this.getSalesByLocationOrDefault(initialState.sales),
+            salesByProductTypes: this.getSalesByProductTypeOrDefault(initialState.sales),
             operationHours: initialState.operationHours
         };
     }
 
     @autobind
     private _getSalesForEntryDate(entryDate: Date): Promise<void> {
-        const barId = this.getUrlParameter('b');
+        const barId = getUrlParameter('b', window.location.search);
 
         return fetch(`/home/getsales?b=${barId}&entryDate=${entryDate.toISOString()}`, {
             method: 'GET'
@@ -72,7 +67,7 @@ export class Dashboard extends React.Component<DashboardProps, DashboardState>{
             }
 
             return {};
-        }).then((salesData: IDashboardInitialState) => {
+        }).then((salesData: ISales) => {
             this.setState({
                 sales: this.getSalesOrDefault(salesData),
                 salesByHours: this.getSalesByHoursOrDefault(salesData),

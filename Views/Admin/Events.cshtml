@@ -1,0 +1,11 @@
+@model System.Collections.Generic.IEnumerable<qsales.Models.Event>
+
+@{
+    ViewData["Title"] = "Manage Events";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/manage-events.js" asp-append-version="true"></script>
+}

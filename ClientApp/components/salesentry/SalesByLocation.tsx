@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { addIndex, compose, lensPath, Lens, map, path, prop, set, sum, view } from 'ramda';
+import { addIndex, compose, defaultTo, lensPath, Lens, map, path, prop, set, sum, toString, view } from 'ramda';
 
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 
-import { ConvertToCurrencyString } from '../../converters/MoneyConverters';
+import { ConvertToCurrencyString } from '../../utilities/CurrencyMath';
 
 import { ISalesByLocation } from '../../types/ISalesByLocation';
 import { IValidationMessage } from '../../types/IValidationMessage';
@@ -34,7 +34,7 @@ const renderLocationRows = (props: SalesByLocationProps) => {
                 <td>
                     <TextField
                         prefix='$'
-                        value={d.amount.toString()}
+                        value={compose(toString, defaultTo(0), prop('amount'))(d)}
                         onChanged={onValueChanged(props, amountLens)}
                         errorMessage={view(amountLens, props.validationMessages)}
                     />

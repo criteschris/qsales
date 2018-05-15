@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { addIndex, compose, find, findIndex, lensPath, Lens, map, path, prop, propEq, set, sum, view } from 'ramda';
+import { addIndex, compose, defaultTo, find, findIndex, lensPath, Lens, map, path, prop, propEq, set, sum, toString, view } from 'ramda';
 
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { ConvertToCurrencyString } from '../../converters/MoneyConverters';
+import { ConvertToCurrencyString } from '../../utilities/CurrencyMath';
 
 import { ISalesByHour } from '../../types/ISalesByHour';
 import { IValidationMessage } from '../../types/IValidationMessage';
@@ -52,21 +52,21 @@ const renderHourRows = (props: SalesByHourProps) => {
                 <td>
                     <TextField
                         prefix='$'
-                        value={sale.amount.toString()}
+                        value={compose(toString, defaultTo(0), prop('amount'))(sale)}
                         onChanged={onValueChanged(props, amountLens)}
                         errorMessage={view(amountLens, props.validationMessages)}
                     />
                 </td>
                 <td>
                     <TextField
-                        value={sale.customers.toString()}
+                        value={compose(toString, defaultTo(0), prop('customers'))(sale)}
                         onChanged={onValueChanged(props, customersLens)}
                         errorMessage={view(customersLens, props.validationMessages)}
                     />
                 </td>
                 <td>
                     <Dropdown
-                        selectedKey={sale.conditionId}
+                        selectedKey={prop('conditionId', sale)}
                         options={conditionOptions}
                         onChanged={onConditionChanged(props, conditionIdLens)}
                     />

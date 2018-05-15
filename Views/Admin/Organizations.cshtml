@@ -1,0 +1,11 @@
+@model System.Collections.Generic.IEnumerable<qsales.Models.Organization>
+
+@{
+    ViewData["Title"] = "Manage Organizations";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/manage-organizations.js" asp-append-version="true"></script>
+}

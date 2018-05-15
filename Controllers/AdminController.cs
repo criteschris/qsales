@@ -39,7 +39,18 @@ namespace qsales.Controllers
             }
 
             ViewData["b"] = b;
-            return View(await _repository.GetEmployeesAsync());
+            return View(await _repository.GetEmployeesAsync(b));
+        }
+
+        public async Task<IActionResult> Events([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
+            return View(await _repository.GetEventsAsync(b));
         }
 
         public async Task<IActionResult> Locations([FromQuery] Guid b)
@@ -50,7 +61,7 @@ namespace qsales.Controllers
             }
 
             ViewData["b"] = b;
-            return View(await _repository.GetLocationsAsync());
+            return View(await _repository.GetLocationsAsync(b));
         }
 
         public async Task<IActionResult> OperationHours([FromQuery] Guid b)
@@ -64,6 +75,28 @@ namespace qsales.Controllers
             return View(await _repository.GetOperationHoursAsync());
         }
 
+        public async Task<IActionResult> Organizations([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
+            return View(await _repository.GetOrganizationsAsync(b));
+        }
+
+        public async Task<IActionResult> Performers([FromQuery] Guid b)
+        {
+            if (b == Guid.Empty)
+            {
+                return Redirect("/");
+            }
+
+            ViewData["b"] = b;
+            return View(await _repository.GetPerformersAsync(b));
+        }
+
         public async Task<IActionResult> ProductTypes([FromQuery] Guid b)
         {
             if (b == Guid.Empty)
@@ -72,7 +105,7 @@ namespace qsales.Controllers
             }
 
             ViewData["b"] = b;
-            return View(await _repository.GetProductTypesAsync());
+            return View(await _repository.GetProductTypesAsync(b));
         }
 
         [AllowAnonymous]
@@ -82,21 +115,27 @@ namespace qsales.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveConditions([FromBody] List<Condition> facets)
+        public async Task<IActionResult> SaveConditions([FromQuery] Guid b, [FromBody] List<Condition> facets)
         {
             return Json(await _repository.SaveConditionsAsync(facets));
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveEmployees([FromBody] List<Employee> facets)
+        public async Task<IActionResult> SaveEmployees([FromQuery] Guid b, [FromBody] List<Employee> facets)
         {
-            return Json(await _repository.SaveEmployeesAsync(facets));
+            return Json(await _repository.SaveEmployeesAsync(b, facets));
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveLocations([FromBody] List<Location> facets)
+        public async Task<IActionResult> SaveEvents([FromQuery] Guid b, [FromBody] List<Event> facets)
         {
-            return Json(await _repository.SaveLocationsAsync(facets));
+            return Json(await _repository.SaveEventsAsync(b, facets));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveLocations([FromQuery] Guid b, [FromBody] List<Location> facets)
+        {
+            return Json(await _repository.SaveLocationsAsync(b, facets));
         }
 
         [HttpPost]
@@ -106,9 +145,21 @@ namespace qsales.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveProductTypes([FromBody] List<ProductType> facets)
+        public async Task<IActionResult> SaveOrganizations([FromQuery] Guid b, [FromBody] List<Organization> facets)
         {
-            return Json(await _repository.SaveProductTypesAsync(facets));
+            return Json(await _repository.SaveOrganizationsAsync(b, facets));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SavePerformers([FromQuery] Guid b, [FromBody] List<Performer> facets)
+        {
+            return Json(await _repository.SavePerformersAsync(b, facets));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveProductTypes([FromQuery] Guid b, [FromBody] List<ProductType> facets)
+        {
+            return Json(await _repository.SaveProductTypesAsync(b, facets));
         }
     }
 }

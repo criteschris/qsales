@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using qsales.Helpers;
 using qsales.Models;
 
 namespace qsales.Extensions
@@ -15,6 +16,22 @@ namespace qsales.Extensions
             return source
             .Where(x => x.EntryDate < entryDate.AddDays(1))
             .Where(x => x.EntryDate >= entryDate);
+        }
+
+        public static IQueryable<Sales> GetSalesByDayOfWeek(this IQueryable<Sales> source, int dayOfWeek) {
+            return source.Where(x => x.EntryDate.DayOfWeek == DayOfWeekHelpers.ConvertIntToDayOfWeek(dayOfWeek));
+        }
+
+        public static IQueryable<Sales> GetSalesByEventId(this IQueryable<Sales> source, int eventId) {
+            return source.Where(x => x.EventId == eventId);
+        }
+
+        public static IQueryable<Sales> GetSalesByOrganizationId(this IQueryable<Sales> source, int organizationId) {
+            return source.Where(x => x.OrganizationId == organizationId);
+        }
+
+        public static IQueryable<Sales> GetSalesByPerformerId(this IQueryable<Sales> source, int performerId) {
+            return source.Where(x => x.PerformerId == performerId);
         }
 
         public static IQueryable<Sales> IncludeSalesBy(this IQueryable<Sales> source)
@@ -92,6 +109,16 @@ namespace qsales.Extensions
                         Name = p.ProductType.Name
                     }
                 }).ToList()
+            });
+        }
+
+        public static IQueryable<SalesReportViewModel> ToSalesReportViewModel(this IQueryable<Sales> source)
+        {
+            return source.Select(x => new SalesReportViewModel {
+                EntryDate = x.EntryDate,
+                TotalSales = x.Hundreds + x.Fifties + x.Twenties + x.Tens + x.Fives + x.Ones + x.CreditCardAmount,
+                TotalCustomers = x.SalesByHours.Sum(y => y.Customers),
+                TotalPersonel = x.Payrolls.Count()
             });
         }
     }

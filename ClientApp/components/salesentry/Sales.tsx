@@ -6,7 +6,7 @@ import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField
 import {
     ConvertToCurrencyString,
     SumCashFromCurrencies
-} from '../../converters/MoneyConverters';
+} from '../../utilities/CurrencyMath';
 
 import { ISales } from '../../types/ISales';
 import { IValidationMessage } from '../../types/IValidationMessage';

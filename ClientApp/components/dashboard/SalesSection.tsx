@@ -9,7 +9,7 @@ import {
     SumHundreds, */
     ConvertToCurrencyString,
     SumCashFromCurrencies
-} from '../../converters/MoneyConverters';
+} from '../../utilities/CurrencyMath';
 
 import { ISales } from '../../types/ISales';
 

@@ -1,0 +1,11 @@
+@model System.Collections.Generic.IEnumerable<qsales.Models.Performer>
+
+@{
+    ViewData["Title"] = "Manage Performers";
+}
+
+<app redux-initial-state="Model" container-element-id="react-app"></app>
+
+@section scripts {
+    <script src="~/js/manage-performers.js" asp-append-version="true"></script>
+}

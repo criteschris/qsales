@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { addIndex, compose, find, findIndex, map, path, prop, propEq, sum } from 'ramda';
 
-import { ConvertToCurrencyString } from '../../converters/MoneyConverters';
+import { ConvertToCurrencyString } from '../../utilities/CurrencyMath';
 
 import { ISalesByHour } from '../../types/ISalesByHour';
 import { IOperationHour } from '../../types/IOperationHour';

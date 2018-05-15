@@ -29,13 +29,54 @@ namespace qsales.Controllers
             }
 
             ViewData["b"] = b;
-            return View(await _facetRepository.GetFacetsAsync());
+
+            var conditionTask = _facetRepository.GetConditionsAsync();
+            var employeeTask = _facetRepository.GetEmployeesAsync(b);
+            var eventTask = _facetRepository.GetEventsAsync(b);
+            var hoursTask = _facetRepository.GetOperationHoursAsync();
+            var locationTask = _facetRepository.GetLocationsAsync(b);
+            var organizationTask = _facetRepository.GetOrganizationsAsync(b);
+            var performerTask = _facetRepository.GetPerformersAsync(b);
+            var productTypeTask = _facetRepository.GetProductTypesAsync(b);
+            var salesTask = _salesRepository.GetSalesByDateAsync(b, DateTime.Now);
+
+            await Task.WhenAll(new Task[] {
+                conditionTask,
+                employeeTask,
+                eventTask,
+                hoursTask,
+                locationTask,
+                organizationTask,
+                performerTask,
+                productTypeTask,
+                salesTask
+            });
+
+            var vm = new SalesEntryViewModel {
+                Conditions = conditionTask.Result,
+                Employees = employeeTask.Result,
+                Events = eventTask.Result,
+                OperationHours = hoursTask.Result,
+                Locations = locationTask.Result,
+                Organizations = organizationTask.Result,
+                Performers = performerTask.Result,
+                ProductTypes = productTypeTask.Result,
+                Sales = salesTask.Result
+            };
+
+            return View(vm);
         }
 
         [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSales([FromQuery] Guid b, [FromQuery] DateTime entryDate)
+        {
+            return Json(await _salesRepository.GetSalesByDateAsync(b, entryDate));
         }
 
         [HttpPost]

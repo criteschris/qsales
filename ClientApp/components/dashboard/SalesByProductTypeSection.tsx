@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { compose, map, path, prop, sum } from 'ramda';
 
-import { ConvertToCurrencyString } from '../../converters/MoneyConverters';
+import { ConvertToCurrencyString } from '../../utilities/CurrencyMath';
 
 import { ISalesByProductType } from '../../types/ISalesByProductType';
 

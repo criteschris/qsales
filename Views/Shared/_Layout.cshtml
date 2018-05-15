@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var aspController = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+    var aspAction = ViewContext.RouteData.Values["action"].ToString().ToLower();
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -32,19 +37,24 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Dashboard" asp-route-b='@ViewData["b"]'>Dashboard</a></li>
-                    <li><a asp-area="" asp-controller="Sales" asp-action="Index" asp-route-b='@ViewData["b"]'>Enter Sales</a></li>
-                    <li class='dropdown'>
+                    <li class="@(aspController == "home" && aspAction == "index" ? "active" : "")"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    @if (ViewData["b"] != null) {
+                    <li class="@(aspController == "home" && aspAction == "dashboard" ? "active" : "")"><a asp-area="" asp-controller="Home" asp-action="Dashboard" asp-route-b='@ViewData["b"]'>Dashboard</a></li>
+                    <li class="@(aspController == "sales" && aspAction == "index" ? "active" : "")"><a asp-area="" asp-controller="Sales" asp-action="Index" asp-route-b='@ViewData["b"]'>Enter Sales</a></li>
+                    <li class='dropdown@(aspController == "admin" ? " active" : "")'>
                         <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup="true" aria-expanded="false">Admin <span class='caret'></span></a>
                         <ul class='dropdown-menu'>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="Conditions" asp-route-b='@ViewData["b"]'>Conditions</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="Employees" asp-route-b='@ViewData["b"]'>Employees</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="Locations" asp-route-b='@ViewData["b"]'>Locations</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="OperationHours" asp-route-b='@ViewData["b"]'>Operation Hours</a></li>
-                            <li><a asp-area="" asp-controller="Admin", asp-action="ProductTypes" asp-route-b='@ViewData["b"]'>Product Types</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "conditions" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="Conditions" asp-route-b='@ViewData["b"]'>Conditions</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "employees" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="Employees" asp-route-b='@ViewData["b"]'>Employees</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "events" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="Events" asp-route-b='@ViewData["b"]'>Events</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "locations" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="Locations" asp-route-b='@ViewData["b"]'>Locations</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "operationhours" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="OperationHours" asp-route-b='@ViewData["b"]'>Operation Hours</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "organizations" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="Organizations" asp-route-b='@ViewData["b"]'>Organizations</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "performers" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="Performers" asp-route-b='@ViewData["b"]'>Performers</a></li>
+                            <li class="@(aspController == "admin" && aspAction == "producttypes" ? "active" : "")"><a asp-area="" asp-controller="Admin", asp-action="ProductTypes" asp-route-b='@ViewData["b"]'>Product Types</a></li>
                         </ul>
                     </li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

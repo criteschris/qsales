@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using qsales.Extensions;
 using qsales.Models;
+using qsales.Policies;
 using qsales.Repositories;
 
 namespace qsales
@@ -38,11 +39,16 @@ namespace qsales
             .AddAzureAd(options => Configuration.Bind("AzureAd", options))
             .AddCookie();
 
+            services.AddAuthorization(options => 
+            {
+                options.AddPolicy(MyAdminRolePolicy.Name, MyAdminRolePolicy.Build);
+            });
+
             //Configure Entity Framework with the DbContext and connection string
             services.AddDbContext<QSalesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("QSales")));
 
             //Require HTTPS
-            services.AddMvc(options => options.Filters.Add(new RequireHttpsAttribute()));
+            services.AddMvc(/*options => options.Filters.Add(new RequireHttpsAttribute())*/);
 
             //Setup DI services
             services.AddScoped<ISalesRepository, SalesRepository>();
@@ -70,8 +76,8 @@ namespace qsales
             }
 
             //redirect to HTTPS before handling any requests
-            var options = new RewriteOptions().AddRedirectToHttps();
-            app.UseRewriter(options);
+            /* var options = new RewriteOptions().AddRedirectToHttps();
+            app.UseRewriter(options); */
 
             app.UseStaticFiles();
 
