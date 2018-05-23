@@ -1,16 +1,16 @@
-import { multiply, sum } from 'ramda';
+import { compose, defaultTo, multiply, sum } from 'ramda';
 
-export const SumOneDollarBills = multiply(1);
+export const SumOneDollarBills = compose(multiply(1), defaultTo(0));
 
-export const SumFiveDollarBills = multiply(5);
+export const SumFiveDollarBills = compose(multiply(5), defaultTo(0));
 
-export const SumTenDollarBills = multiply(10);
+export const SumTenDollarBills = compose(multiply(10), defaultTo(0));
 
-export const SumTwentyDollarBills = multiply(20);
+export const SumTwentyDollarBills = compose(multiply(20), defaultTo(0));
 
-export const SumFiftyDollarBills = multiply(50);
+export const SumFiftyDollarBills = compose(multiply(50), defaultTo(0));
 
-export const SumHundredDollarBills = multiply(100);
+export const SumHundredDollarBills = compose(multiply(100), defaultTo(0));
 
 export const ConvertToCurrencyString = (value: number = 0) => '$' + value.toFixed(2);
 

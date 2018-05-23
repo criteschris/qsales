@@ -21,12 +21,14 @@ namespace qsales
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -39,7 +41,7 @@ namespace qsales
             .AddAzureAd(options => Configuration.Bind("AzureAd", options))
             .AddCookie();
 
-            services.AddAuthorization(options => 
+            services.AddAuthorization(options =>
             {
                 options.AddPolicy(MyAdminRolePolicy.Name, MyAdminRolePolicy.Build);
             });
@@ -47,8 +49,15 @@ namespace qsales
             //Configure Entity Framework with the DbContext and connection string
             services.AddDbContext<QSalesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("QSales")));
 
-            //Require HTTPS
-            services.AddMvc(/*options => options.Filters.Add(new RequireHttpsAttribute())*/);
+            //Require HTTPS, but not for local testing
+            var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
+            services.AddMvc(options =>
+            {
+                if (!Environment.IsDevelopment() || (Environment.IsDevelopment() && !skipHTTPS))
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                }
+            });
 
             //Setup DI services
             services.AddScoped<ISalesRepository, SalesRepository>();
@@ -67,10 +76,12 @@ namespace qsales
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope()){
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
                 var context = serviceScope.ServiceProvider.GetService<QSalesDbContext>();
 
-                if (context.Database.GetAppliedMigrations().Any()) {
+                if (context.Database.GetAppliedMigrations().Any())
+                {
                     context.EnsureSeedData();
                 }
             }
