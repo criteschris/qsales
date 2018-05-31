@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { assoc, compose, curry, defaultTo, is, lens, Lens, multiply, prop, set, toString, unless, view } from 'ramda';
 
+import { Col, Panel, Row, Table } from 'react-bootstrap';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 
 import {
@@ -27,7 +28,6 @@ const creditCardLens = lens(prop('creditCardAmount'), assoc('creditCardAmount'))
 
 const calculateCashTotal = (sales: ISales) => SumCashFromCurrencies(sales.ones, sales.fives, sales.tens, sales.twenties, sales.fifties, sales.hundreds);
 const calculateTotalSales = (sales: ISales) => SumCashFromCurrencies(sales.ones, sales.fives, sales.tens, sales.twenties, sales.fifties, sales.hundreds, sales.creditCardAmount);
-const sumCreditCards = (sales: ISales) => compose(ConvertToCurrencyString, multiply(1), defaultTo(0), view(creditCardLens))(sales);
 
 const convertNumericValueToString = curry((l: Lens, obj: ISales) => compose(unless(is(String), toString), defaultTo(0), view(l))(obj));
 
@@ -50,80 +50,78 @@ export const Sales = (props: SalesProps) => {
     return (
         <div>
             <h4>Cash register information</h4>
-            <div className='panel panel-default'>
-                {/* <div className='panel-body'> */}
-                    <table className='table table-striped'>
-                        <thead>
-                            <tr>
-                                <th>Bills</th>
-                                <th className='text-right'>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>100's</td>
-                                <td>
-                                    <TextField suffix='.00' {...buildPropsForCurrencyField(hundredsLens, props)} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>50's</td>
-                                <td>
-                                    <TextField suffix='.00' {...buildPropsForCurrencyField(fiftiesLens, props)} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>20's</td>
-                                <td>
-                                    <TextField suffix='.00' {...buildPropsForCurrencyField(twentiesLens, props)} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>10's</td>
-                                <td>
-                                    <TextField suffix='.00' {...buildPropsForCurrencyField(tensLens, props)} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5's</td>
-                                <td>
-                                    <TextField suffix='.00' {...buildPropsForCurrencyField(fivesLens, props)} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1's</td>
-                                <td>
-                                    <TextField suffix='.00' {...buildPropsForCurrencyField(onesLens, props)} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>Total Cash:</strong>
-                                </td>
-                                <td className='text-right'>
-                                    <strong>{calculateCashTotal(props.sales)}</strong>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Credit</td>
-                                <td>
-                                    <TextField {...buildPropsForCurrencyField(creditCardLens, props)} />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                {/* </div> */}
-                <div className='panel-footer'>
-                    <div className='row'>
-                        <div className='col-xs-6'>
+            <Panel bsStyle='default'>
+                <Table striped>
+                    <thead>
+                        <tr>
+                            <th>Bills</th>
+                            <th className='text-right'>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>100's</td>
+                            <td>
+                                <TextField suffix='.00' {...buildPropsForCurrencyField(hundredsLens, props)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>50's</td>
+                            <td>
+                                <TextField suffix='.00' {...buildPropsForCurrencyField(fiftiesLens, props)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20's</td>
+                            <td>
+                                <TextField suffix='.00' {...buildPropsForCurrencyField(twentiesLens, props)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>10's</td>
+                            <td>
+                                <TextField suffix='.00' {...buildPropsForCurrencyField(tensLens, props)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5's</td>
+                            <td>
+                                <TextField suffix='.00' {...buildPropsForCurrencyField(fivesLens, props)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1's</td>
+                            <td>
+                                <TextField suffix='.00' {...buildPropsForCurrencyField(onesLens, props)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Total Cash:</strong>
+                            </td>
+                            <td className='text-right'>
+                                <strong>{calculateCashTotal(props.sales)}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Credit</td>
+                            <td>
+                                <TextField {...buildPropsForCurrencyField(creditCardLens, props)} />
+                            </td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <Panel.Footer>
+                    <Row>
+                        <Col xs={6}>
                             <strong>Total Sales: </strong>
-                        </div>
-                        <div className='col-xs-6 text-right'>
+                        </Col>
+                        <Col xs={6} className='text-right'>
                             <strong>{calculateTotalSales(props.sales)}</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </Col>
+                    </Row>
+                </Panel.Footer>
+            </Panel>
         </div>
     );
 };

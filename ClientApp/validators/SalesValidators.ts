@@ -3,37 +3,37 @@ import { IFieldValidator } from '../types/IFieldValidator';
 
 export const SalesValidators: IFieldValidator[] = [
     {
-        fieldName: 'hundredDollarBills',
+        fieldName: 'hundreds',
         validators: [
             Numeric('Value must be a number')
         ]
     },
     {
-        fieldName: 'fiftyDollarBills',
+        fieldName: 'fifties',
         validators: [
             Numeric('Value must be a number')
         ]
     },
     {
-        fieldName: 'twentyDollarBills',
+        fieldName: 'twenties',
         validators: [
             Numeric('Value must be a number')
         ]
     },
     {
-        fieldName: 'tenDollarBills',
+        fieldName: 'tens',
         validators: [
             Numeric('Value must be a number')
         ]
     },
     {
-        fieldName: 'fiveDollarBills',
+        fieldName: 'fives',
         validators: [
             Numeric('Value must be a number')
         ]
     },
     {
-        fieldName: 'oneDollarBills',
+        fieldName: 'ones',
         validators: [
             Numeric('Value must be a number')
         ]

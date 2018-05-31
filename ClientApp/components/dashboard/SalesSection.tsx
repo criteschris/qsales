@@ -1,12 +1,8 @@
 import * as React from 'react';
 import { prop } from 'ramda';
 
+import { Col, Panel, Row, Table } from 'react-bootstrap';
 import {
-    /* SumFives,
-    SumTens,
-    Sumtwenties,
-    Sumfifties,
-    SumHundreds, */
     ConvertToCurrencyString,
     SumCashFromCurrencies
 } from '../../utilities/CurrencyMath';
@@ -24,9 +20,8 @@ export const SalesSection = (props: SalesSectionProps) => {
     return (
         <div>
             <h4>Cash register information</h4>
-            <div className='panel panel-default'>
-                {/* <div className='panel-body'> */}
-                    <table className='table table-striped'>
+            <Panel bsStyle='default'>
+                    <Table striped>
                         <thead>
                             <tr>
                                 <th>Bills</th>
@@ -71,19 +66,18 @@ export const SalesSection = (props: SalesSectionProps) => {
                                 <td className='text-right'>{ConvertToCurrencyString(props.sales.creditCardAmount)}</td>
                             </tr>
                         </tbody>
-                    </table>
-                {/* </div> */}
-                <div className='panel-footer'>
-                    <div className='row'>
-                        <div className='col-xs-6'>
+                    </Table>
+                <Panel.Footer>
+                    <Row>
+                        <Col xs={6}>
                             <strong>Total Sales: </strong>
-                        </div>
-                        <div className='col-xs-6 text-right'>
+                        </Col>
+                        <Col xs={6} className='text-right'>
                             <strong>{calculateTotalSales(props.sales)}</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </Col>
+                    </Row>
+                </Panel.Footer>
+            </Panel>
         </div>
     );
 };

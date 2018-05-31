@@ -1,9 +1,10 @@
 import { IProductType } from './IProductType';
+import { ISummable } from './ISummable';
 
-export interface ISalesByProductType {
+export interface ISalesByProductType extends ISummable {
     id: number;
     productTypeId: number;
     entryDate: Date;
-    amount: number;
+    //amount: number;
     productType: IProductType;
 }

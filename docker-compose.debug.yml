@@ -1,0 +1,16 @@
+version: '2.1'
+
+services:
+  qsales:
+    image: criteschris/qsales
+    labels:
+      - "com.microsoft.visualstudio.targetoperatingsystem=windows"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    networks:
+      test:
+          ipv4_address: 172.16.238.10
+    entrypoint: tail -f /dev/null
+networks:
+  test:

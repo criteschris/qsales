@@ -1,9 +1,12 @@
 import * as React from 'react';
-import { addIndex, compose, defaultTo, lensPath, Lens, map, path, prop, set, sum, toString, view } from 'ramda';
+import { compose, defaultTo, lensPath, Lens, path, prop, replace, set, view } from 'ramda';
+import { indexedMap, toString } from '../../extensions/RamdaExtensions';
 
+import { Col, Panel, Row, Table } from 'react-bootstrap';
 import { TextField, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 
 import { ConvertToCurrencyString } from '../../utilities/CurrencyMath';
+import { calculateTotalSales } from '../../extensions/SalesExtensions';
 
 import { ISalesByProductType } from '../../types/ISalesByProductType';
 import { IValidationMessage } from '../../types/IValidationMessage';
@@ -14,10 +17,6 @@ export interface SalesByProductTypeProps {
     onChanged: (sales: ISalesByProductType[]) => void;
 }
 
-const indexedMap = addIndex(map);
-
-const calculateTotalSales = (sales: ISalesByProductType[]) => compose<ISalesByProductType[], number[], number, string>(ConvertToCurrencyString, sum, map(s => s.amount))(sales);
-
 const onValueChanged = (props: SalesByProductTypeProps, l: Lens) => (value: string) => {
     const updatedSales = set(l, value, props.sales);
 
@@ -27,9 +26,10 @@ const onValueChanged = (props: SalesByProductTypeProps, l: Lens) => (value: stri
 const renderProductRows = (props: SalesByProductTypeProps) => {
     return indexedMap((d: ISalesByProductType, idx: number) => {
         const amountLens = lensPath([idx, 'amount']);
+        const rowKey = compose(replace(/[ '"]/g, ''), path(['productType', 'name']))(d);
 
         return (
-            <tr key={idx}>
+            <tr key={rowKey}>
                 <td>{path(['productType', 'name'], d)}</td>
                 <td>
                     <TextField
@@ -48,31 +48,29 @@ export const SalesByProductType = (props: SalesByProductTypeProps) => {
     return (
         <div>
             <h4>Sales totals categorized by product</h4>
-            <div className='panel panel-default'>
-                {/* <div className='panel-body'> */}
-                    <table className='table table-striped'>
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderProductRows(props)}
-                        </tbody>
-                    </table>
-                {/* </div> */}
-                <div className='panel-footer'>
-                    <div className='row'>
-                        <div className='col-xs-6'>
+            <Panel bsStyle='default'>
+                <Table striped>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderProductRows(props)}
+                    </tbody>
+                </Table>
+                <Panel.Footer>
+                    <Row>
+                        <Col xs={6}>
                             <strong>Total Sales: </strong>
-                        </div>
-                        <div className='col-xs-6 text-right'>
+                        </Col>
+                        <Col xs={6} className='text-right'>
                             <strong>{calculateTotalSales(props.sales)}</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </Col>
+                    </Row>
+                </Panel.Footer>
+            </Panel>
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { compose, map, path, prop, sum } from 'ramda';
 
+import { Col, Panel, Row, Table } from 'react-bootstrap';
 import { ConvertToCurrencyString } from '../../utilities/CurrencyMath';
 
 import { ISalesByProductType } from '../../types/ISalesByProductType';
@@ -26,9 +27,8 @@ export const SalesByProductTypeSection = (props: SalesByProductTypeSectionProps)
     return (
         <div>
             <h4>Sales totals categorized by product</h4>
-            <div className='panel panel-default'>
-                {/* <div className='panel-body'> */}
-                    <table className='table table-striped'>
+            <Panel bsStyle='default'>
+                    <Table striped>
                         <thead>
                             <tr>
                                 <th>Product</th>
@@ -38,19 +38,18 @@ export const SalesByProductTypeSection = (props: SalesByProductTypeSectionProps)
                         <tbody>
                             {renderProductRows(props.sales)}
                         </tbody>
-                    </table>
-                {/* </div> */}
-                <div className='panel-footer'>
-                    <div className='row'>
-                        <div className='col-xs-6'>
+                    </Table>
+                <Panel.Footer>
+                    <Row>
+                        <Col xs={6}>
                             <strong>Total Sales: </strong>
-                        </div>
-                        <div className='col-xs-6 text-right'>
+                        </Col>
+                        <Col xs={6} className='text-right'>
                             <strong>{calculateTotalSales(props.sales)}</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </Col>
+                    </Row>
+                </Panel.Footer>
+            </Panel>
         </div>
     );
 };

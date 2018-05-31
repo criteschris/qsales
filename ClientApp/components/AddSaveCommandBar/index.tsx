@@ -6,24 +6,29 @@ import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 
-export const AddSaveCommandBar = (props: { isSaving: boolean, onAdd: () => void, onSave: () => void }) => {
+export interface AddSaveCommandBarProps {
+    isSaving: boolean,
+    onAdd: () => void,
+    onSave: () => void
+}
 
-    const onRenderSaveButton = (item: IContextualMenuItem) => {
-        let icon = <Icon style={{ padding: '0 4px', fontSize: '16px', color: '#106ebe' }} iconName='Save' />;
+const onRenderSaveButton = (props: AddSaveCommandBarProps) => (item: IContextualMenuItem): JSX.Element => {
+    let icon = <Icon style={{ padding: '0 4px', fontSize: '16px', color: '#106ebe' }} iconName='Save' />;
 
-        if (props.isSaving) {
-            icon = <Spinner style={{ padding: '0 4px' }} size={SpinnerSize.small} />;
-        }
+    if (props.isSaving) {
+        icon = <Spinner style={{ padding: '0 4px' }} size={SpinnerSize.small} />;
+    }
 
-        return <CommandBarButton
-            disabled={props.isSaving}
-            onClick={(ev: React.MouseEvent<HTMLButtonElement>) => props.onSave()}>
-            {icon}
-            <span style={{ padding: '0 4px' }}>Save Changes</span>
-        </CommandBarButton>;
-    };
+    return <CommandBarButton
+        disabled={props.isSaving}
+        onClick={(ev: React.MouseEvent<HTMLButtonElement>) => props.onSave()}>
+        {icon}
+        <span style={{ padding: '0 4px' }}>Save Changes</span>
+    </CommandBarButton>;
+};
 
-    const commands: IContextualMenuItem[] = [
+const buildCommands = (props: AddSaveCommandBarProps): IContextualMenuItem[] => {
+    return [
         {
             key: 'new',
             name: 'Add',
@@ -35,15 +40,17 @@ export const AddSaveCommandBar = (props: { isSaving: boolean, onAdd: () => void,
         {
             key: 'save',
             name: 'Save Changes',
-            onRender: onRenderSaveButton
+            onRender: onRenderSaveButton(props)
         }
     ];
+};
 
+
+export const AddSaveCommandBar = (props: AddSaveCommandBarProps) => {
     return (
         <CommandBar
-            items={commands}
+            items={buildCommands(props)}
             isSearchBoxVisible={false}
         />
     );
-
 }

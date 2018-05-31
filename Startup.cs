@@ -50,14 +50,15 @@ namespace qsales
             services.AddDbContext<QSalesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("QSales")));
 
             //Require HTTPS, but not for local testing
-            var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
+            /* var skipHTTPS = Configuration.GetValue<bool>("LocalTest:skipHTTPS");
             services.AddMvc(options =>
             {
                 if (!Environment.IsDevelopment() || (Environment.IsDevelopment() && !skipHTTPS))
                 {
                     options.Filters.Add(new RequireHttpsAttribute());
                 }
-            });
+            }); */
+            services.AddMvc();
 
             //Setup DI services
             services.AddScoped<ISalesRepository, SalesRepository>();
